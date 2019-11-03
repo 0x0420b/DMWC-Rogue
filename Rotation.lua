@@ -220,6 +220,7 @@ function Rogue.Rotation()
 	if UsePotion() then
 		return true
 	end
+
 	if Player.Combat then
 		if DEF() then
 			return true
@@ -229,6 +230,20 @@ function Rogue.Rotation()
 	if not Player.Combat and not Player.Moving then
 		if Poison() then
 			return true
+		end
+	end
+
+	if Setting("Stealth While Eating") then
+		local Eating = AuraUtil.FindAuraByName('Food', 'player')
+
+		if Eating and Spell.Stealth:IsReady() and not Player.Combat and not Buff.Stealth:Exist(Player) then
+			if Spell.Stealth:Cast() then
+				return true
+			end
+		end
+
+		if not Eating and Buff.Stealth:Exist(Player) then
+			RunMacroText("/CancelAura Stealth")
 		end
 	end
 	
@@ -248,11 +263,6 @@ function Rogue.Rotation()
 	--end
 	-- Sprint always
 	
-	-- Open Clams
-	if Setting("Open Clams") and not Player.Combat then
-		RunMacroText("/script l=5;m=0;f=string.find;for b=0,4,1 do for s=1,GetContainerNumSlots(b),1 do n=GetContainerItemLink(b,s);if n and f(n,\"Clam\")then if f(n,\"Clam \")or f(n,\"Clams\")then b=b else l=b;m=s;end;end;end;end;if l<5 and m>0 then UseContainerItem(l,m)end")
-			return
-	end
 	-- Fix kick all. (MAKE SURE INTERRUPT TARGET IS SET TO ANY IN ENEMY TAB)
 	if Setting("Kick") then
 		for _, Unit in pairs(DMW.Attackable) do
