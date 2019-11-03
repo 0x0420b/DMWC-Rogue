@@ -372,7 +372,7 @@ function Rogue.Rotation()
 	end
 	-- Stop until Swing
 	if Setting("Stop until swing") then
-    	if (Player.SwingMH > 0 and Player.SwingMH < 0.9 * UnitAttackSpeed("player") and (Player.Power < 80 or Player.SwingMH <= Player.NextTick)) and Target and Target.TTD and Target.TTD >= 2 then
+    	if Player.SwingMH and (Player.SwingMH > 0 and Player.SwingMH < 0.9 * UnitAttackSpeed("player") and (Player.Power < 80 or Player.SwingMH <= Player.NextTick)) and Target and Target.TTD and Target.TTD >= 2 then
     		return true
     	end
     end
